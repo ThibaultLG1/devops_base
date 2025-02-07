@@ -1,11 +1,14 @@
-const http = require('http');
+const express = require('express');
+const app = express();
 
-const server = http.createServer((req, res) => {
-  res.writeHead(200, { 'Content-Type': 'text/plain' });
-  res.send('DevOps Labs!');;
+app.get('/', (req, res) => {
+  res.send('DevOps Labs');
 });
 
 const port = process.env.PORT || 8080;
-server.listen(port, () => {
+const server = app.listen(port, () => {
   console.log(`Listening on port ${port}`);
 });
+
+// Export du serveur pour Supertest
+module.exports = server;
