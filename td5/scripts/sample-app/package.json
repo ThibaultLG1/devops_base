@@ -6,7 +6,7 @@
   "scripts": {
     "start": "node app.js",
     "dockerize": "./build-docker-image.sh",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "jest --verbose"
   },
   "author": "Yevgeniy Brikman",
   "license": "MIT"
