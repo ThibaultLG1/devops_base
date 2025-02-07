@@ -9,5 +9,8 @@
     "test": "jest --verbose"
   },
   "author": "Yevgeniy Brikman",
-  "license": "MIT"
+  "license": "MIT",
+  "devDependencies": {
+    "jest": "^29.7.0"
+  }
 }
