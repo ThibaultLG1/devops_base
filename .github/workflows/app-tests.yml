@@ -11,6 +11,8 @@ jobs:
       - name: Install dependencies
         working-directory: td5/scripts/sample-app
         run: npm install
+      - name: Install Jest globally
+        run: npm install -g jest
       - name: Run tests
         working-directory: td5/scripts/sample-app
         run: npm test
