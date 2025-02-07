@@ -1,5 +1,8 @@
 {
   "devDependencies": {
     "jest": "^29.7.0"
+  },
+  "dependencies": {
+    "mime": "^4.0.6"
   }
 }
