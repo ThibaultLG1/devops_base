@@ -1,5 +1,5 @@
 on: push
-<<<<<<< HEAD
+
    
 jobs:
      opentofu_test:
