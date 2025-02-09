@@ -16,18 +16,18 @@ jobs:
       - name: Configure AWS credentials
         uses: aws-actions/configure-aws-credentials@v3
         with:
-          role-to-assume: arn:aws:iam::463470972708:role/lambda-sample-tests
+          role-to-assume: arn:aws:iam::111111111111:role/lambda-sample-tests
           role-session-name: tests-${{ github.run_number }}-${{ github.actor }}
           aws-region: eu-west-3
 
       - name: Setup OpenTofu
         uses: opentofu/setup-opentofu@v1    
 
-      - name: Delete previous Terraform cache 
+      - name: Delete previous Terraform cache
         run: |
           rm -rf .terraform .terraform.lock.hcl || true
 
-      - name: Force reconfigure Terraform  
+      - name: Force reconfigure Terraform
         env:
           TF_VAR_name: lambda-sample-${{ github.run_id }}
         working-directory: td5/scripts/tofu/live/lambda-sample
@@ -35,5 +35,6 @@ jobs:
           tofu init -reconfigure -backend=false -input=false
           tofu get
           tofu test -verbose
+
 
     
