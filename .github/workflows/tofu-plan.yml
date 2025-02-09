@@ -1,0 +1,54 @@
+name: Tofu Apply 
+
+on: 
+  push: 
+    branches: ["main"] 
+    paths: ["td5/scripts/tofu/live/lambda-sample/**"] 
+
+jobs: 
+  apply: 
+    name: "Tofu Apply" 
+    runs-on: ubuntu-latest 
+    permissions: 
+      pull-requests: write 
+      id-token: write 
+      contents: read 
+    steps: 
+      - name: Checkout repository 
+        uses: actions/checkout@v4 
+
+      - name: Configure AWS credentials 
+        uses: aws-actions/configure-aws-credentials@v3 
+        with:
+          role-to-assume: arn:aws:iam::463470972708:role/lambda-sample-apply 
+          role-session-name: apply-${{ github.run_number }}-${{ github.actor }} 
+          aws-region: us-east-2 
+
+      - name: Setup OpenTofu 
+        uses: opentofu/setup-opentofu@v1 
+
+      - name: Tofu apply 
+        id: apply 
+        working-directory: td5/scripts/tofu/live/lambda-sample 
+        run: | 
+          tofu init -no-color -input=false 
+          tofu apply -no-color -input=false -lock-timeout=60m -auto-approve || (echo "⚠️ Tofu Apply failed!" && exit 1)
+
+      - name: Find current PR 
+        uses: jwalton/gh-find-current-pr@master 
+        id: find_pr 
+        with:
+          state: all 
+
+      - name: Create or update comment 
+        uses: peter-evans/create-or-update-comment@v4 
+        if: steps.find_pr.outputs.number 
+        env: 
+          RESULT_EMOJI: ${{ steps.apply.outcome == 'success' && '✅' || '⚠ ' }} 
+        with:
+          issue-number: ${{ steps.find_pr.outputs.number }} 
+          body: | 
+            ## ${{ env.RESULT_EMOJI }} `tofu apply` output 
+            ``` 
+            ${{ steps.apply.outputs.stdout }} 
+            ```
