@@ -3,10 +3,9 @@ provider "aws" {
 }
 
 module "function" {
-  source = "github.com/BTajini/devops-base/tree/main/td3/tofu/modules/lambda"
+  source = "git::https://github.com/BTajini/devops-base.git//td3/tofu/modules/lambda"
 
   name = var.name
-
   src_dir = "${path.module}/src"
   runtime = "nodejs20.x"
   handler = "index.handler"
@@ -20,7 +19,7 @@ module "function" {
 }
 
 module "gateway" {
-  source = "github.com/BTajini/devops-base/tree/main/td3/tofu/modules/api-gateway"
+  source = "git::https://github.com/BTajini/devops-base.git//td3/tofu/modules/api-gateway"
 
   name = var.name
   function_arn       = module.function.function_arn
